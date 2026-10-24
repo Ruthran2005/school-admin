@@ -1,49 +1,46 @@
 <?php
-
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+    public const ADMIN_MODULES = [
+        'students' => 'Students',
+        'teachers' => 'Teachers',
+        'classes' => 'Classes',
+        'subjects' => 'Subjects',
+        'timetable' => 'Timetable',
+        'attendance' => 'Attendance',
+        'exams' => 'Exams & reports',
+        'marks' => 'Marks',
+        'fees' => 'Fee structures',
+        'invoices' => 'Invoices & receipts',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $fillable = ['name', 'email', 'password', 'role', 'phone', 'admin_permissions'];
+    protected $hidden = ['password', 'remember_token'];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return ['email_verified_at' => 'datetime', 'password' => 'hashed', 'admin_permissions' => 'array'];
+    }
+
+    public function student() { return $this->hasOne(Student::class); }
+    public function isAdmin(): bool { return $this->role === 'admin'; }
+
+    public function hasModuleAccess(string $module): bool
+    {
+        return $this->isAdmin()
+            && ($this->admin_permissions === null || in_array($module, $this->admin_permissions, true));
+    }
+
+    public function canManageAdmins(): bool
+    {
+        return $this->isAdmin() && $this->admin_permissions === null;
     }
 }
