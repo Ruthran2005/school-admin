@@ -24,5 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 'message' => $exception->getMessage(),
                 'code' => $exception->getCode(),
             ]);
+
+            return false;
         });
     })->create();
