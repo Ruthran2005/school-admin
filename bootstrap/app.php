@@ -18,13 +18,5 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->report(function (Throwable $exception): void {
-            \Illuminate\Support\Facades\Log::error('Request exception diagnostic', [
-                'exception' => $exception::class,
-                'message' => $exception->getMessage(),
-                'code' => $exception->getCode(),
-            ]);
-
-            return false;
-        });
+        //
     })->create();

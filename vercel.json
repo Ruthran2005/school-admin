@@ -46,6 +46,7 @@
         "APP_SERVICES_CACHE": "/tmp/services.php",
         "DB_CONNECTION": "mysql",
         "DB_PORT": "3306",
+        "MYSQL_ATTR_SSL_CA": "/var/task/user/config/certs/isrgrootx1.pem",
         "CACHE_DRIVER": "array",
         "CACHE_STORE": "array",
         "LOG_CHANNEL": "stderr",
