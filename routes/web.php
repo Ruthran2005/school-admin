@@ -5,7 +5,9 @@ use App\Http\Controllers\{AdminUserController, AttendanceController, AuthControl
 use App\Http\Middleware\RoleMiddleware as Role;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/dashboard');
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
